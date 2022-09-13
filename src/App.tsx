@@ -2,7 +2,9 @@ import { darkTheme, styled } from "@src/styles";
 import { useAtom } from "jotai";
 import { toggleDarkThemeAtom } from "@src/store/atoms";
 import "@src/styles/reset.css";
-import ThemeSwitch from "./components/ThemeSwitch";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Layout from "./components/Layout";
 
 const AppWrapper = styled("div", {
   background: "$slate1",
@@ -10,6 +12,8 @@ const AppWrapper = styled("div", {
   minWidth: "100vw",
   padding: "$2",
   transition: "$default",
+  color: "$slate12",
+  fontFamily: "$montserrat"
 });
 
 function App() {
@@ -17,7 +21,13 @@ function App() {
   const theme = isDarkTheme ? darkTheme : "";
   return (
     <AppWrapper className={theme}>
-      <ThemeSwitch />
+      <BrowserRouter>
+        <Layout>
+          <Routes>
+            <Route index element={<Home />} />
+          </Routes>
+        </Layout>
+      </BrowserRouter>
     </AppWrapper>
   );
 }
