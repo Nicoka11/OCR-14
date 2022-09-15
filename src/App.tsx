@@ -13,12 +13,16 @@ const AppWrapper = styled("div", {
   padding: "$2",
   transition: "$default",
   color: "$slate12",
-  fontFamily: "$montserrat"
+  fontFamily: "$montserrat",
 });
 
 function App() {
   const [isDarkTheme] = useAtom(toggleDarkThemeAtom);
   const theme = isDarkTheme ? darkTheme : "";
+  const root = document.getElementById("root");
+  if (root)
+    root.style.cssText = `color-scheme: ${isDarkTheme ? "dark" : "light"} `;
+
   return (
     <AppWrapper className={theme}>
       <BrowserRouter>

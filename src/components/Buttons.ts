@@ -1,7 +1,8 @@
 import { styled } from "@src/styles";
 
 export const ButtonPrimary = styled("button", {
-  padding: "$2 $4",
+  padding: "$3 $6",
+  width: "$full",
   backgroundColor: "$blue5",
   color: "$slate12",
   border: "none",

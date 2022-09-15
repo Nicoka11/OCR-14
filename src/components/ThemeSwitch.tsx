@@ -6,9 +6,14 @@ import { ButtonGhost } from "./Buttons";
 const ThemeSwitch = () => {
   const [isDarkTheme, setIsDarkTheme] = useAtom(toggleDarkThemeAtom);
   const icon = isDarkTheme ? <LightThemeIcon /> : <DarkThemeIcon />;
+
+  function onClickHandler(): void {
+    setIsDarkTheme(!isDarkTheme);
+  }
+
   return (
     <ButtonGhost
-      onClick={() => setIsDarkTheme(!isDarkTheme)}
+      onClick={onClickHandler}
       css={{
         height: "$8",
         width: "$8",

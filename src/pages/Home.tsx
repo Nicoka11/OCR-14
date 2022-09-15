@@ -1,5 +1,5 @@
-import Input from "@src/components/Input";
+import NewEmployeeForm from "@src/components/NewEmployeeForm";
 
-const Home = () => <Input placeholder="Nicolas" />;
+const Home = () => <NewEmployeeForm/>;
 
 export default Home;
