@@ -1,7 +1,6 @@
 import { StaticRoutes } from "@src/constants";
 import { styled } from "@src/styles";
 import { Link } from "react-router-dom";
-import { Box } from "./BaseElements";
 import ThemeSwitch from "./ThemeSwitch";
 
 const NavLink = styled(Link, {
