@@ -15,12 +15,16 @@ export const ButtonPrimary = styled("button", {
   "&:active": {
     backgroundColor: "$blue6",
   },
+  "&:disabled": {
+    backgroundColor: "$blue3",
+    color: "$slate8",
+  },
 });
 
 export const ButtonGhost = styled("button", {
   padding: "$2 $4",
   color: "$slate12",
-  background:"transparent",
+  background: "transparent",
   border: "none",
   borderRadius: "$base",
   cursor: "pointer",
