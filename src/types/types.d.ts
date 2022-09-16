@@ -4,7 +4,10 @@ export interface Employee {
   lastName: string;
   birthDate: string;
   startDate: string;
+  street: string;
   city: string;
   state: string;
   zipCode: string;
 }
+
+export interface AddEmployeePayload extends Omit<Employee, "id"> {}

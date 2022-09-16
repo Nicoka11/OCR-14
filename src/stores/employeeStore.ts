@@ -1,18 +1,27 @@
-import { Employee } from "@src/types";
+import { AddEmployeePayload, Employee } from "@src/types";
 import create from "zustand";
+import { nanoid } from "nanoid";
 
 interface Store {
   employees: Employee[];
+  addEmployee: (employee: AddEmployeePayload) => void;
+  removeEmployee: (id: string) => void;
 }
 
-const EmployeeStore = create<Store>((set) => ({
+const useEmployeeStore = create<Store>((set) => ({
   employees: [],
-  addEmployee: (newEmployee: Employee) =>
-    set((state) => ({ employees: [...state.employees, newEmployee] })),
+  addEmployee: (newEmployeePayload: AddEmployeePayload) =>
+    set((state) => {
+      const newEmployee: Employee = {
+        id: nanoid(),
+        ...newEmployeePayload,
+      };
+      return { employees: [...state.employees, newEmployee] };
+    }),
   removeEmployee: (id: string) =>
     set((state) => ({
       employees: state.employees.filter((user) => user.id !== id),
     })),
 }));
 
-export default EmployeeStore;
+export default useEmployeeStore;

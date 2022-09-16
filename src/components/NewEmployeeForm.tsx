@@ -1,19 +1,23 @@
 import { styled } from "@src/styles";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { ButtonPrimary } from "./Buttons";
 import Input from "./Input";
 import { UsStates } from "@src/constants";
 import { Box } from "./BaseElements";
+import { AddEmployeePayload } from "@src/types";
+import { useEmployeeStore } from "@src/stores";
+import { nanoid } from "nanoid";
+import ErrorBanner from "./ErrorBanner";
 
 enum FormFields {
-  FirstName = "first-name",
-  LastName = "last-name",
-  BirthDate = "date-of-birth",
-  StartDate = "start-date",
+  FirstName = "firstName",
+  LastName = "lastName",
+  BirthDate = "birthDate",
+  StartDate = "startDate",
   AddressStreet = "street",
   AddressCity = "city",
   AddressState = "state",
-  AddressZipCode = "zip-code",
+  AddressZipCode = "zipCode",
 }
 
 const Heading = styled("h1", {
@@ -22,7 +26,7 @@ const Heading = styled("h1", {
   textAlign: "center",
 });
 
-const Form = styled("div", {
+const Form = styled("form", {
   display: "flex",
   flexDirection: "column",
   gap: "$3",
@@ -38,7 +42,20 @@ const Group = styled("div", {
 });
 
 const NewEmployeeForm = () => {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid, isSubmitted },
+  } = useForm<AddEmployeePayload>();
+
+  const stateValidator = {
+    required: true,
+    validate: (value: string) => value !== "default",
+  };
+  const addEmployee = useEmployeeStore((state) => state.addEmployee);
+  const onSubmit: SubmitHandler<AddEmployeePayload> = (data) => {
+    addEmployee(data);
+  };
 
   return (
     <Box
@@ -49,11 +66,11 @@ const NewEmployeeForm = () => {
       }}
     >
       <Heading>Create Employee</Heading>
-      <Form onSubmit={handleSubmit((data) => console.log(data))}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <Group>
           <label htmlFor={FormFields.FirstName}>First name</label>
           <Input
-            {...register(FormFields.FirstName)}
+            {...register(FormFields.FirstName, { required: true })}
             placeholder="First name"
             id={FormFields.FirstName}
           />
@@ -61,7 +78,7 @@ const NewEmployeeForm = () => {
         <Group>
           <label htmlFor={FormFields.LastName}>Last name</label>
           <Input
-            {...register(FormFields.LastName)}
+            {...register(FormFields.LastName, { required: true })}
             placeholder="Last name"
             id={FormFields.LastName}
           />
@@ -70,7 +87,7 @@ const NewEmployeeForm = () => {
           <label htmlFor={FormFields.BirthDate}>Birth date</label>
           <Input
             type="date"
-            {...register(FormFields.BirthDate)}
+            {...register(FormFields.BirthDate, { required: true })}
             id={FormFields.BirthDate}
           />
         </Group>
@@ -78,7 +95,7 @@ const NewEmployeeForm = () => {
           <label htmlFor={FormFields.StartDate}>Start date</label>
           <Input
             type="date"
-            {...register(FormFields.StartDate)}
+            {...register(FormFields.StartDate, { required: true })}
             id={FormFields.StartDate}
           />
         </Group>
@@ -86,7 +103,7 @@ const NewEmployeeForm = () => {
         <Group>
           <label htmlFor={FormFields.AddressStreet}>Street</label>
           <Input
-            {...register(FormFields.AddressStreet)}
+            {...register(FormFields.AddressStreet, { required: true })}
             placeholder="31b"
             id={FormFields.AddressStreet}
           />
@@ -94,7 +111,7 @@ const NewEmployeeForm = () => {
         <Group>
           <label htmlFor={FormFields.AddressCity}>City</label>
           <Input
-            {...register(FormFields.AddressCity)}
+            {...register(FormFields.AddressCity, { required: true })}
             placeholder="Baker Street"
             id={FormFields.AddressCity}
           />
@@ -103,19 +120,25 @@ const NewEmployeeForm = () => {
           <label htmlFor={FormFields.AddressState}>State</label>
           <Input
             as="select"
-            {...register(FormFields.AddressState)}
+            {...register(FormFields.AddressState, stateValidator)}
             placeholder="Arizona"
+            defaultValue="default"
             id={FormFields.AddressState}
           >
+            <option value="default" disabled>
+              Select your state
+            </option>
             {UsStates.map((state) => (
-              <option value={state.abbreviation}>{state.name}</option>
+              <option key={nanoid()} value={state.abbreviation}>
+                {state.name}
+              </option>
             ))}
           </Input>
         </Group>
         <Group>
           <label htmlFor={FormFields.AddressZipCode}>Zipcode</label>
           <Input
-            {...register(FormFields.AddressZipCode)}
+            {...register(FormFields.AddressZipCode, { required: true })}
             placeholder="77000"
             id={FormFields.AddressZipCode}
           />
@@ -124,7 +147,11 @@ const NewEmployeeForm = () => {
           as="input"
           type="submit"
           value="Save"
-          css={{ marginTop: "$12" }}
+          css={{ marginTop: "$4", marginBottom: "$12" }}
+        />
+        <ErrorBanner
+          message="Please fill all the fields"
+          show={isSubmitted && !isValid}
         />
       </Form>
     </Box>

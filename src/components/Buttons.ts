@@ -3,7 +3,7 @@ import { styled } from "@src/styles";
 export const ButtonPrimary = styled("button", {
   padding: "$3 $6",
   width: "$full",
-  backgroundColor: "$blue5",
+  backgroundColor: "$blue6",
   color: "$slate12",
   border: "none",
   borderRadius: "$base",

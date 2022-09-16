@@ -1,10 +1,12 @@
 import { darkTheme, styled } from "@src/styles";
 import { useAtom } from "jotai";
-import { toggleDarkThemeAtom } from "@src/store/atoms";
+import { toggleDarkThemeAtom } from "@src/atomic/atoms";
 import "@src/styles/reset.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
+import Employees from "./pages/Employees";
 import Layout from "./components/Layout";
+import { StaticRoutes } from "./constants";
 
 const AppWrapper = styled("div", {
   background: "$slate1",
@@ -29,6 +31,7 @@ function App() {
         <Layout>
           <Routes>
             <Route index element={<Home />} />
+            <Route path={StaticRoutes.Employees} element={<Employees />} />
           </Routes>
         </Layout>
       </BrowserRouter>

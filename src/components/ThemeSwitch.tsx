@@ -1,5 +1,5 @@
 import { DarkThemeIcon, LightThemeIcon } from "@src/icons/Theme";
-import { toggleDarkThemeAtom } from "@src/store/atoms";
+import { toggleDarkThemeAtom } from "@src/atomic/atoms";
 import { useAtom } from "jotai";
 import { ButtonGhost } from "./Buttons";
 

@@ -1,5 +1,12 @@
 import { createStitches, createTheme } from "@stitches/react";
-import { blue, blueDark, slate, slateDark } from "@radix-ui/colors";
+import {
+  blue,
+  blueDark,
+  slate,
+  slateDark,
+  red,
+  redDark,
+} from "@radix-ui/colors";
 
 const space = {
   0: "0px",
@@ -68,6 +75,7 @@ const darkTheme = createTheme("dark-theme", {
   colors: {
     ...blueDark,
     ...slateDark,
+    ...redDark,
   },
 });
 
@@ -76,6 +84,7 @@ const { styled, css } = createStitches({
     colors: {
       ...blue,
       ...slate,
+      ...red,
     },
     space,
     sizes: space,
