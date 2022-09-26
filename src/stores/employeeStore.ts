@@ -6,6 +6,7 @@ interface Store {
   employees: Employee[];
   addEmployee: (employee: AddEmployeePayload) => void;
   removeEmployee: (id: string) => void;
+  removeLastEmployee: () => void;
 }
 
 const useEmployeeStore = create<Store>((set) => ({
@@ -22,6 +23,13 @@ const useEmployeeStore = create<Store>((set) => ({
     set((state) => ({
       employees: state.employees.filter((user) => user.id !== id),
     })),
+  removeLastEmployee: () =>
+    set((state) => {
+      if (!state.employees.length) return { employees: state.employees };
+      return {
+        employees: [{ ...state.employees.pop() }] as Employee[],
+      };
+    }),
 }));
 
 export default useEmployeeStore;

@@ -1,7 +1,7 @@
 import { DarkThemeIcon, LightThemeIcon } from "@src/icons/Theme";
 import { toggleDarkThemeAtom } from "@src/atomic/atoms";
 import { useAtom } from "jotai";
-import { ButtonGhost } from "./Buttons";
+import { Button } from "./Buttons";
 
 const ThemeSwitch = () => {
   const [isDarkTheme, setIsDarkTheme] = useAtom(toggleDarkThemeAtom);
@@ -12,7 +12,8 @@ const ThemeSwitch = () => {
   }
 
   return (
-    <ButtonGhost
+    <Button
+      variant="ghost"
       onClick={onClickHandler}
       css={{
         height: "$8",
@@ -24,7 +25,7 @@ const ThemeSwitch = () => {
       }}
     >
       {icon}
-    </ButtonGhost>
+    </Button>
   );
 };
 

@@ -96,6 +96,12 @@ const { styled, css } = createStitches({
     },
     radii,
     media,
+    zIndices: {
+      toast: 20000,
+    },
+    shadows: {
+      toast: "0px 15px 13px -3px rgba(0,0,0,0.1);",
+    },
   },
 });
 

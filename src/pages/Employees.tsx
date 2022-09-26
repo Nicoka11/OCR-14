@@ -5,7 +5,9 @@ const Employees = () => {
   return (
     <div>
       {employeeList.map((el, i) => (
-        <p key={i}>{el.firstName}</p>
+        <p key={i}>
+          {el.firstName}, from {el.state}
+        </p>
       ))}
     </div>
   );

@@ -1,13 +1,12 @@
 import { styled } from "@src/styles";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ButtonPrimary } from "./Buttons";
-import Input from "./Input";
+import { Button } from "./Buttons";
+import InputGroup from "./Input";
 import { UsStates } from "@src/constants";
 import { Box } from "./BaseElements";
 import { AddEmployeePayload } from "@src/types";
 import { useEmployeeStore } from "@src/stores";
 import { nanoid } from "nanoid";
-import ErrorBanner from "./ErrorBanner";
 
 enum FormFields {
   FirstName = "firstName",
@@ -20,6 +19,8 @@ enum FormFields {
   AddressZipCode = "zipCode",
 }
 
+const requiredMessage = "This fields is required";
+
 const Heading = styled("h1", {
   marginBottom: "$4",
   fontSize: "1.5rem",
@@ -29,7 +30,7 @@ const Heading = styled("h1", {
 const Form = styled("form", {
   display: "flex",
   flexDirection: "column",
-  gap: "$3",
+  gap: "$6",
   width: "$full",
   maxWidth: "$72",
 });
@@ -45,16 +46,25 @@ const NewEmployeeForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { isValid, isSubmitted },
+    reset,
+    formState: { errors },
+    clearErrors,
   } = useForm<AddEmployeePayload>();
 
   const stateValidator = {
-    required: true,
-    validate: (value: string) => value !== "default",
+    required: requiredMessage,
+    validate: (value: string) =>
+      value !== "default" || "Please select a state in the list",
   };
   const addEmployee = useEmployeeStore((state) => state.addEmployee);
   const onSubmit: SubmitHandler<AddEmployeePayload> = (data) => {
     addEmployee(data);
+    resetFields();
+  };
+
+  const resetFields = () => {
+    clearErrors();
+    reset();
   };
 
   return (
@@ -67,92 +77,92 @@ const NewEmployeeForm = () => {
     >
       <Heading>Create Employee</Heading>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Group>
-          <label htmlFor={FormFields.FirstName}>First name</label>
-          <Input
-            {...register(FormFields.FirstName, { required: true })}
-            placeholder="First name"
-            id={FormFields.FirstName}
-          />
-        </Group>
-        <Group>
-          <label htmlFor={FormFields.LastName}>Last name</label>
-          <Input
-            {...register(FormFields.LastName, { required: true })}
-            placeholder="Last name"
-            id={FormFields.LastName}
-          />
-        </Group>
-        <Group>
-          <label htmlFor={FormFields.BirthDate}>Birth date</label>
-          <Input
-            type="date"
-            {...register(FormFields.BirthDate, { required: true })}
-            id={FormFields.BirthDate}
-          />
-        </Group>
-        <Group>
-          <label htmlFor={FormFields.StartDate}>Start date</label>
-          <Input
-            type="date"
-            {...register(FormFields.StartDate, { required: true })}
-            id={FormFields.StartDate}
-          />
-        </Group>
-
-        <Group>
-          <label htmlFor={FormFields.AddressStreet}>Street</label>
-          <Input
-            {...register(FormFields.AddressStreet, { required: true })}
-            placeholder="31b"
-            id={FormFields.AddressStreet}
-          />
-        </Group>
-        <Group>
-          <label htmlFor={FormFields.AddressCity}>City</label>
-          <Input
-            {...register(FormFields.AddressCity, { required: true })}
-            placeholder="Baker Street"
-            id={FormFields.AddressCity}
-          />
-        </Group>
-        <Group>
-          <label htmlFor={FormFields.AddressState}>State</label>
-          <Input
-            as="select"
-            {...register(FormFields.AddressState, stateValidator)}
-            placeholder="Arizona"
-            defaultValue="default"
-            id={FormFields.AddressState}
-          >
-            <option value="default" disabled>
-              Select your state
+        <InputGroup
+          errorMessage={errors.firstName?.message}
+          label="First Name"
+          id={FormFields.FirstName}
+          placeholder="First name"
+          {...register(FormFields.FirstName, { required: requiredMessage })}
+        />
+        <InputGroup
+          errorMessage={errors.lastName?.message}
+          label="Last Name"
+          id={FormFields.LastName}
+          placeholder="Last name"
+          {...register(FormFields.LastName, { required: requiredMessage })}
+        />
+        <InputGroup
+          errorMessage={errors.birthDate?.message}
+          label="Birth date"
+          type="date"
+          id={FormFields.BirthDate}
+          {...register(FormFields.BirthDate, { required: requiredMessage })}
+        />
+        <InputGroup
+          errorMessage={errors.startDate?.message}
+          label="Start date"
+          type="date"
+          id={FormFields.StartDate}
+          {...register(FormFields.StartDate, { required: requiredMessage })}
+        />
+        <InputGroup
+          errorMessage={errors.street?.message}
+          label="Street"
+          placeholder="31b Baker Street"
+          id={FormFields.AddressStreet}
+          {...register(FormFields.AddressStreet, { required: requiredMessage })}
+        />
+        <InputGroup
+          errorMessage={errors.city?.message}
+          label="City"
+          placeholder="London"
+          id={FormFields.AddressCity}
+          {...register(FormFields.AddressCity, { required: requiredMessage })}
+        />
+        <InputGroup
+          as="select"
+          errorMessage={errors.state?.message}
+          label="State"
+          placeholder="Arizona"
+          defaultValue="default"
+          id={FormFields.AddressState}
+          {...register(FormFields.AddressState, stateValidator)}
+        >
+          <option value="default" disabled>
+            Select your state
+          </option>
+          {UsStates.map((state) => (
+            <option key={nanoid()} value={state.abbreviation}>
+              {state.name}
             </option>
-            {UsStates.map((state) => (
-              <option key={nanoid()} value={state.abbreviation}>
-                {state.name}
-              </option>
-            ))}
-          </Input>
-        </Group>
-        <Group>
-          <label htmlFor={FormFields.AddressZipCode}>Zipcode</label>
-          <Input
-            {...register(FormFields.AddressZipCode, { required: true })}
-            placeholder="77000"
-            id={FormFields.AddressZipCode}
+          ))}
+        </InputGroup>
+        <InputGroup
+          id={FormFields.AddressZipCode}
+          errorMessage={errors.zipCode?.message}
+          label="Zipcode"
+          placeholder="70000"
+          {...register(FormFields.AddressZipCode, {
+            required: requiredMessage,
+          })}
+        />
+        <div>
+          <Button
+            css={{ marginTop: "$6" }}
+            as="input"
+            type="submit"
+            value="Save"
+            size="full"
           />
-        </Group>
-        <ButtonPrimary
-          as="input"
-          type="submit"
-          value="Save"
-          css={{ marginTop: "$4", marginBottom: "$12" }}
-        />
-        <ErrorBanner
-          message="Please fill all the fields"
-          show={isSubmitted && !isValid}
-        />
+          <Button
+            variant="ghost"
+            size="full"
+            onClick={resetFields}
+            css={{ marginBottom: "$12", marginTop: "$2" }}
+          >
+            Reset fields
+          </Button>
+        </div>
       </Form>
     </Box>
   );

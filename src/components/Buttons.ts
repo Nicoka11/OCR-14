@@ -1,8 +1,8 @@
 import { styled } from "@src/styles";
 
-export const ButtonPrimary = styled("button", {
+export const Button = styled("button", {
   padding: "$3 $6",
-  width: "$full",
+  width: "fit-content",
   backgroundColor: "$blue6",
   color: "$slate12",
   border: "none",
@@ -19,14 +19,27 @@ export const ButtonPrimary = styled("button", {
     backgroundColor: "$blue3",
     color: "$slate8",
   },
-});
-
-export const ButtonGhost = styled("button", {
-  padding: "$2 $4",
-  color: "$slate12",
-  background: "transparent",
-  border: "none",
-  borderRadius: "$base",
-  cursor: "pointer",
-  transition: "$default",
+  variants: {
+    variant: {
+      ghost: {
+        color: "$blue6",
+        backgroundColor: "transparent",
+        "&:hover": {
+          backgroundColor: "transparent",
+        },
+        "&:active": {
+          backgroundColor: "transparent",
+        },
+        "&:disabled": {
+          backgroundColor: "transparent",
+          color: "$slate8",
+        },
+      },
+    },
+    size: {
+      full: {
+        width: "$full",
+      },
+    },
+  },
 });
