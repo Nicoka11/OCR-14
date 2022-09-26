@@ -35,11 +35,8 @@ const Form = styled("form", {
   maxWidth: "$72",
 });
 
-const Group = styled("div", {
-  display: "flex",
-  flexDirection: "column",
-  gap: "$2",
-  width: "100%",
+const Option = styled("option", {
+  backgroundColor: "$slate1",
 });
 
 const NewEmployeeForm = () => {
@@ -128,13 +125,13 @@ const NewEmployeeForm = () => {
           id={FormFields.AddressState}
           {...register(FormFields.AddressState, stateValidator)}
         >
-          <option value="default" disabled>
+          <Option value="default" disabled>
             Select your state
-          </option>
+          </Option>
           {UsStates.map((state) => (
-            <option key={nanoid()} value={state.abbreviation}>
+            <Option key={nanoid()} value={state.abbreviation}>
               {state.name}
-            </option>
+            </Option>
           ))}
         </InputGroup>
         <InputGroup
