@@ -11,7 +11,6 @@ import { useCallback, useEffect, useState } from "react";
 import AddEmployeeToast from "./AddEmployeeToast";
 import { lastEmployeeAddedId } from "@src/atomic/atoms";
 import { useAtom } from "jotai";
-import { triggerAsyncId } from "async_hooks";
 
 enum FormFields {
   FirstName = "firstName",
@@ -51,7 +50,6 @@ const NewEmployeeForm = () => {
     reset,
     trigger,
     formState: { errors, isValid },
-    formState,
   } = useForm<AddEmployeePayload>({
     mode: "onChange",
     reValidateMode: "onChange",
