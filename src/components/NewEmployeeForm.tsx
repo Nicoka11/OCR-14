@@ -4,9 +4,14 @@ import { Button } from "./Buttons";
 import InputGroup from "./Input";
 import { UsStates } from "@src/constants";
 import { Box } from "./BaseElements";
-import { AddEmployeePayload } from "@src/types";
+import { AddEmployeePayload, Employee } from "@src/types";
 import { useEmployeeStore } from "@src/stores";
 import { nanoid } from "nanoid";
+import { useCallback, useEffect, useState } from "react";
+import AddEmployeeToast from "./AddEmployeeToast";
+import { lastEmployeeAddedId } from "@src/atomic/atoms";
+import { useAtom } from "jotai";
+import { triggerAsyncId } from "async_hooks";
 
 enum FormFields {
   FirstName = "firstName",
@@ -22,7 +27,7 @@ enum FormFields {
 const requiredMessage = "This fields is required";
 
 const Heading = styled("h1", {
-  marginBottom: "$4",
+  marginBottom: "$12",
   fontSize: "1.5rem",
   textAlign: "center",
 });
@@ -44,10 +49,19 @@ const NewEmployeeForm = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
-    clearErrors,
-  } = useForm<AddEmployeePayload>();
-
+    trigger,
+    formState: { errors, isValid },
+    formState,
+  } = useForm<AddEmployeePayload>({
+    mode: "onChange",
+    reValidateMode: "onChange",
+  });
+  const hasErrors = useCallback(
+    () => Boolean(Object.values(errors).length),
+    [errors]
+  );
+  const [asyncReset, setAsyncReset] = useState<boolean>(false);
+  const [_, setId] = useAtom(lastEmployeeAddedId);
   const stateValidator = {
     required: requiredMessage,
     validate: (value: string) =>
@@ -55,15 +69,19 @@ const NewEmployeeForm = () => {
   };
   const addEmployee = useEmployeeStore((state) => state.addEmployee);
   const onSubmit: SubmitHandler<AddEmployeePayload> = (data) => {
-    addEmployee(data);
+    const id = nanoid();
+    const employee: Employee = { id, ...data };
+    addEmployee(employee);
+    setId(id);
     resetFields();
   };
 
-  const resetFields = () => {
-    clearErrors();
-    reset();
-  };
+  const resetFields = () => setAsyncReset(!asyncReset);
 
+  useEffect(() => {
+    reset();
+    trigger();
+  }, [asyncReset]);
   return (
     <Box
       css={{
@@ -80,6 +98,7 @@ const NewEmployeeForm = () => {
           id={FormFields.FirstName}
           placeholder="First name"
           {...register(FormFields.FirstName, { required: requiredMessage })}
+          defaultValue=""
         />
         <InputGroup
           errorMessage={errors.lastName?.message}
@@ -144,12 +163,10 @@ const NewEmployeeForm = () => {
           })}
         />
         <div>
-          <Button
+          <AddEmployeeToast
+            hasErrors={hasErrors()}
+            disabled={!isValid}
             css={{ marginTop: "$6" }}
-            as="input"
-            type="submit"
-            value="Save"
-            size="full"
           />
           <Button
             variant="ghost"
