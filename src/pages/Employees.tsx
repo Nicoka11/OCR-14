@@ -1,16 +1,7 @@
-import { useEmployeeStore } from "@src/stores";
+import EmployeeTable from "@src/components/EmployeesTable";
 
 const Employees = () => {
-  const employeeList = useEmployeeStore((state) => state.employees);
-  return (
-    <div>
-      {employeeList.map((el, i) => (
-        <p key={i}>
-          {el.firstName}, from {el.state}
-        </p>
-      ))}
-    </div>
-  );
+  return <EmployeeTable />;
 };
 
 export default Employees;
