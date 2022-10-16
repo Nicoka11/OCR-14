@@ -18,6 +18,14 @@ const columns = [
     cell: (data) => data.getValue(),
     header: () => <span>Last Name</span>,
   }),
+  columnHelper.accessor("startDate", {
+    cell: (data) => data.getValue(),
+    header: () => <span>Start Name</span>,
+  }),
+  columnHelper.accessor("department", {
+    cell: (data) => data.getValue(),
+    header: () => <span>Start Name</span>,
+  }),
 ];
 
 const EmployeeTable = () => {

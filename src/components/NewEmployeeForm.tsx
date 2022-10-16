@@ -21,6 +21,7 @@ enum FormFields {
   AddressCity = "city",
   AddressState = "state",
   AddressZipCode = "zipCode",
+  Department = "department",
 }
 
 const requiredMessage = "This fields is required";
@@ -135,14 +136,13 @@ const NewEmployeeForm = () => {
         />
         <InputGroup
           as="select"
+          id={FormFields.AddressState}
           errorMessage={errors.state?.message}
           label="State"
-          placeholder="Arizona"
           defaultValue="default"
-          id={FormFields.AddressState}
           {...register(FormFields.AddressState, stateValidator)}
         >
-          <Option value="default" disabled>
+          <Option value="default" disabled hidden>
             Select your state
           </Option>
           {UsStates.map((state) => (
@@ -160,6 +160,24 @@ const NewEmployeeForm = () => {
             required: requiredMessage,
           })}
         />
+        <div>
+          <InputGroup
+            as="select"
+            id={FormFields.Department}
+            errorMessage={errors.department?.message}
+            label="Department"
+            defaultValue="sales"
+            {...register(FormFields.AddressZipCode)}
+          >
+            <Option value="sales" selected>
+              Sales
+            </Option>
+            <Option value="marketing">Marketing</Option>
+            <Option value="engineering">Engineering</Option>
+            <Option value="human-ressources">Human Resources</Option>
+            <Option value="legal">Legal</Option>
+          </InputGroup>
+        </div>
         <div>
           <AddEmployeeToast
             hasErrors={hasErrors()}

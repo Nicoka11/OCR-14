@@ -8,6 +8,7 @@ export interface Employee {
   city: string;
   state: string;
   zipCode: string;
+  department: string;
 }
 
 export interface AddEmployeePayload extends Omit<Employee, "id"> {}
