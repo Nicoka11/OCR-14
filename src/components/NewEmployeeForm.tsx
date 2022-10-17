@@ -167,7 +167,7 @@ const NewEmployeeForm = () => {
             errorMessage={errors.department?.message}
             label="Department"
             defaultValue="sales"
-            {...register(FormFields.AddressZipCode)}
+            {...register(FormFields.Department)}
           >
             <Option value="sales" selected>
               Sales
