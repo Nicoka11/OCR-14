@@ -44,6 +44,7 @@ const space = {
   80: "20rem",
   96: "24rem",
   full: "100%",
+  container: "1284px",
 };
 
 const radii = {

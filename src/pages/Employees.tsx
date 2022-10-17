@@ -1,7 +1,12 @@
-import EmployeeTable from "@src/components/EmployeesTable";
+import { Container } from "@src/components/BaseElements";
+import EmployeeTable from "@src/components/EmployeeTable";
 
 const Employees = () => {
-  return <EmployeeTable />;
+  return (
+    <Container>
+      <EmployeeTable />
+    </Container>
+  );
 };
 
 export default Employees;

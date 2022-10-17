@@ -20,11 +20,27 @@ const columns = [
   }),
   columnHelper.accessor("startDate", {
     cell: (data) => data.getValue(),
-    header: () => <span>Start Name</span>,
+    header: () => <span>Start Date</span>,
   }),
   columnHelper.accessor("department", {
     cell: (data) => data.getValue(),
-    header: () => <span>Start Name</span>,
+    header: () => <span>Department</span>,
+  }),
+  columnHelper.accessor("birthDate", {
+    cell: (data) => data.getValue(),
+    header: () => <span>Date of birth</span>,
+  }),
+  columnHelper.accessor("street", {
+    cell: (data) => data.getValue(),
+    header: () => <span>Street</span>,
+  }),
+  columnHelper.accessor("city", {
+    cell: (data) => data.getValue(),
+    header: () => <span>City</span>,
+  }),
+  columnHelper.accessor("state", {
+    cell: (data) => data.getValue(),
+    header: () => <span>State</span>,
   }),
 ];
 
