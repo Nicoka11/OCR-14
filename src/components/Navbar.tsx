@@ -1,6 +1,7 @@
 import { StaticRoutes } from "@src/constants";
 import { styled } from "@src/styles";
 import { Link } from "react-router-dom";
+import { Container } from "./BaseElements";
 import ThemeSwitch from "./ThemeSwitch";
 
 const NavLink = styled(Link, {
@@ -16,21 +17,23 @@ const Flex = styled("div", {
 
 const Header = styled("header", {
   as: "header",
-  width: "$96",
+  width: "$full",
   display: "flex",
   justifyContent: "space-between",
-  margin: "0 auto",
   marginBottom: "$12",
+  marginTop:"$6"
 });
 
 const Navbar = () => (
-  <Header>
-    <Flex>
-      <NavLink to={StaticRoutes.Home}>Home</NavLink>
-      <NavLink to={StaticRoutes.Employees}>Employees</NavLink>
-    </Flex>
-    <ThemeSwitch />
-  </Header>
+  <Container>
+    <Header>
+      <Flex>
+        <NavLink to={StaticRoutes.Home}>Home</NavLink>
+        <NavLink to={StaticRoutes.Employees}>Employees</NavLink>
+      </Flex>
+      <ThemeSwitch />
+    </Header>
+  </Container>
 );
 
 export default Navbar;

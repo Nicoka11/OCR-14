@@ -6,6 +6,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useEmployeeStore } from "@src/stores";
+import { TBody, Td, Th, THead, Tr } from "./TableElements";
+import { Container } from "../BaseElements";
 
 const columnHelper = createColumnHelper<Employee>();
 
@@ -53,35 +55,37 @@ const EmployeeTable = () => {
   });
 
   return (
-    <table>
-      <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <td key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <Container>
+      <table>
+        <THead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <Th key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </Th>
+              ))}
+            </tr>
+          ))}
+        </THead>
+        <TBody>
+          {table.getRowModel().rows.map((row, index) => (
+            <Tr lightBg={Boolean(index % 2)} key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <Td key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Td>
+              ))}
+            </Tr>
+          ))}
+        </TBody>
+      </table>
+    </Container>
   );
 };
 

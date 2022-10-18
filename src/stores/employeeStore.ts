@@ -1,5 +1,6 @@
 import { Employee } from "@src/types";
 import create from "zustand";
+import dataset from "./employee-dataset";
 
 interface Store {
   employees: Employee[];
@@ -8,7 +9,7 @@ interface Store {
 }
 
 const useEmployeeStore = create<Store>((set) => ({
-  employees: [],
+  employees: dataset,
   addEmployee: (newEmployee: Employee) =>
     set((state) => {
       return { employees: [...state.employees, newEmployee] };
