@@ -3,6 +3,7 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { useEmployeeStore } from "@src/stores";
@@ -54,31 +55,41 @@ const columns = [
   }),
 ];
 
-enum ShowAmounts {
-  LOW = 10,
-  MID = 25,
-  HIGH = 100,
-}
+const showAmounts = [10, 25, 50, 100];
 
 const EmployeeTable = () => {
   const employees: Employee[] = useEmployeeStore((state) => state.employees);
   const [data, setData] = useState(employees);
-  const [showAmount, setShowAmount] = useState<ShowAmounts>(ShowAmounts.LOW);
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
+  const min =
+    table.getState().pagination.pageIndex *
+    table.getState().pagination.pageSize;
+
+  const range = min + table.getState().pagination.pageSize;
+  const max = range > employees.length ? employees.length : range;
 
   return (
     <Container>
       <Stack space css={{ marginBottom: "$6" }}>
         <Stack align css={{ gap: "$2" }}>
           Show{" "}
-          <Input as="select">
-            <Option value={ShowAmounts.LOW}>{ShowAmounts.LOW}</Option>
-            <Option value={ShowAmounts.MID}>{ShowAmounts.MID}</Option>
-            <Option value={ShowAmounts.HIGH}>{ShowAmounts.HIGH}</Option>
+          <Input
+            as="select"
+            value={table.getState().pagination.pageSize}
+            onChange={(e) => {
+              table.setPageSize(Number(e.target.value));
+            }}
+          >
+            {showAmounts.map((amount, i) => (
+              <Option value={amount} key={i}>
+                {amount}
+              </Option>
+            ))}
           </Input>
           entries
         </Stack>
@@ -117,14 +128,26 @@ const EmployeeTable = () => {
         </TBody>
       </Table>
       <Stack space css={{ marginTop: "$8" }}>
-        <Text>Showing 1 to 10 of 100 entries</Text>
+        <Text>
+          Showing {min} to {max} of {employees.length} entries
+        </Text>
         <Stack align css={{ gap: "$3" }}>
-          <IconButton variant="ghost">
-            <ChevronLeft></ChevronLeft>
+          <IconButton
+            variant="ghost"
+            onClick={() => table.previousPage()}
+            visible={!table.getCanPreviousPage()}
+          >
+            <ChevronLeft />
           </IconButton>
-          <Text>1 - 10</Text>
-          <IconButton variant="ghost">
-            <ChevronRight></ChevronRight>
+          <Text>
+            {table.getState().pagination.pageIndex + 1} - {table.getPageCount()}
+          </Text>
+          <IconButton
+            variant="ghost"
+            onClick={() => table.nextPage()}
+            visible={!table.getCanNextPage()}
+          >
+            <ChevronRight />
           </IconButton>
         </Stack>
       </Stack>

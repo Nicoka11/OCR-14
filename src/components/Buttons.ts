@@ -41,6 +41,12 @@ export const Button = styled("button", {
         width: "$full",
       },
     },
+    visible: {
+      true: {
+        opacity: "0",
+        pointerEvents: "none",
+      },
+    },
   },
 });
 
