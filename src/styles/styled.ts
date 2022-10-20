@@ -1,4 +1,4 @@
-import { createStitches, createTheme } from "@stitches/react";
+import { createStitches, createTheme, CSS } from "@stitches/react";
 import {
   blue,
   blueDark,
@@ -44,7 +44,7 @@ const space = {
   80: "20rem",
   96: "24rem",
   full: "100%",
-  container: "1284px",
+  container: "1440px",
 };
 
 const radii = {

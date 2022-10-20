@@ -25,6 +25,10 @@ export const Input = styled("input", {
   },
 });
 
+export const Option = styled("option", {
+  backgroundColor: "$slate1",
+});
+
 const Group = styled("div", {
   display: "flex",
   flexDirection: "column",

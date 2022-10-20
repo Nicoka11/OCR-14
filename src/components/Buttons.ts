@@ -43,3 +43,10 @@ export const Button = styled("button", {
     },
   },
 });
+
+export const IconButton = styled(Button, {
+  height: "$8",
+  width: "$8",
+  overflow: "hidden",
+  padding: "$0",
+});

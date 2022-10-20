@@ -83,7 +83,7 @@ const dataset: Employee[] = [
     city: "Knoxville",
     state: "Tennessee",
     zipCode: "37919",
-    department: "markting",
+    department: "marketing",
   },
   {
     id: "752d7572-be19-4a33-9033-2dbbe6d7bb2a",
@@ -95,7 +95,7 @@ const dataset: Employee[] = [
     city: "Miami",
     state: "Florida",
     zipCode: "33147",
-    department: "markting",
+    department: "marketing",
   },
   {
     id: "63a50e3a-eeb6-4bb4-a3f8-a8ac49d07ae2",
@@ -119,7 +119,7 @@ const dataset: Employee[] = [
     city: "Orange",
     state: "California",
     zipCode: "92668",
-    department: "markting",
+    department: "marketing",
   },
   {
     id: "79f8f37b-d647-468d-a154-4feec8158a6c",
@@ -179,7 +179,7 @@ const dataset: Employee[] = [
     city: "Colorado Springs",
     state: "Colorado",
     zipCode: "80920",
-    department: "markting",
+    department: "marketing",
   },
 ];
 

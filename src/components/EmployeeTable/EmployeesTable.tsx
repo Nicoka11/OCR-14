@@ -6,8 +6,12 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useEmployeeStore } from "@src/stores";
-import { TBody, Td, Th, THead, Tr } from "./TableElements";
-import { Container } from "../BaseElements";
+import { Table, TBody, Td, Th, THead, Tr } from "./TableElements";
+import { Container, Stack, Text } from "@src/components/BaseElements";
+import { useState } from "react";
+import { Input, Option } from "@src/components/Input";
+import { ChevronLeft, ChevronRight } from "@src/icons/Chevron";
+import { IconButton } from "@src/components/Buttons";
 
 const columnHelper = createColumnHelper<Employee>();
 
@@ -44,19 +48,46 @@ const columns = [
     cell: (data) => data.getValue(),
     header: () => <span>State</span>,
   }),
+  columnHelper.accessor("zipCode", {
+    cell: (data) => data.getValue(),
+    header: () => <span>ZipCode</span>,
+  }),
 ];
+
+enum ShowAmounts {
+  LOW = 10,
+  MID = 25,
+  HIGH = 100,
+}
 
 const EmployeeTable = () => {
   const employees: Employee[] = useEmployeeStore((state) => state.employees);
+  const [data, setData] = useState(employees);
+  const [showAmount, setShowAmount] = useState<ShowAmounts>(ShowAmounts.LOW);
   const table = useReactTable({
-    data: employees,
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
   return (
     <Container>
-      <table>
+      <Stack space css={{ marginBottom: "$6" }}>
+        <Stack align css={{ gap: "$2" }}>
+          Show{" "}
+          <Input as="select">
+            <Option value={ShowAmounts.LOW}>{ShowAmounts.LOW}</Option>
+            <Option value={ShowAmounts.MID}>{ShowAmounts.MID}</Option>
+            <Option value={ShowAmounts.HIGH}>{ShowAmounts.HIGH}</Option>
+          </Input>
+          entries
+        </Stack>
+        <Stack align css={{ gap: "$2" }}>
+          <p>Search</p>
+          <Input />
+        </Stack>
+      </Stack>
+      <Table>
         <THead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -84,7 +115,19 @@ const EmployeeTable = () => {
             </Tr>
           ))}
         </TBody>
-      </table>
+      </Table>
+      <Stack space css={{ marginTop: "$8" }}>
+        <Text>Showing 1 to 10 of 100 entries</Text>
+        <Stack align css={{ gap: "$3" }}>
+          <IconButton variant="ghost">
+            <ChevronLeft></ChevronLeft>
+          </IconButton>
+          <Text>1 - 10</Text>
+          <IconButton variant="ghost">
+            <ChevronRight></ChevronRight>
+          </IconButton>
+        </Stack>
+      </Stack>
     </Container>
   );
 };

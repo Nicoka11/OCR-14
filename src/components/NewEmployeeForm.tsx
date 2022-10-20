@@ -1,9 +1,9 @@
 import { styled } from "@src/styles";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "./Buttons";
-import InputGroup from "./Input";
+import InputGroup, { Option } from "./Input";
 import { UsStates } from "@src/constants";
-import { Box } from "./BaseElements";
+import { Box, Heading } from "./BaseElements";
 import { AddEmployeePayload, Employee } from "@src/types";
 import { useEmployeeStore } from "@src/stores";
 import { nanoid } from "nanoid";
@@ -26,22 +26,12 @@ enum FormFields {
 
 const requiredMessage = "This fields is required";
 
-const Heading = styled("h1", {
-  marginBottom: "$12",
-  fontSize: "1.5rem",
-  textAlign: "center",
-});
-
 const Form = styled("form", {
   display: "flex",
   flexDirection: "column",
   gap: "$6",
   width: "$full",
   maxWidth: "$72",
-});
-
-const Option = styled("option", {
-  backgroundColor: "$slate1",
 });
 
 const NewEmployeeForm = () => {

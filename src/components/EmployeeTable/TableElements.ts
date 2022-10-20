@@ -1,5 +1,9 @@
 import { styled } from "@src/styles";
 
+export const Table = styled("table", {
+  width: "$full",
+});
+
 export const Th = styled("th", {
   padding: "$4 $2",
 });
