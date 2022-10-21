@@ -26,6 +26,11 @@ export const Stack = styled("div", {
         justifyContent: "space-between",
       },
     },
+    center: {
+      true: {
+        justifyContent: "center",
+      },
+    },
     align: {
       true: {
         alignItems: "center",

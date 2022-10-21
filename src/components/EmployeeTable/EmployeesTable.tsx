@@ -1,20 +1,34 @@
 import { Employee } from "@src/types";
 import {
+  ColumnFiltersState,
   createColumnHelper,
+  FilterFn,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { rankItem } from "@tanstack/match-sorter-utils";
 import { useEmployeeStore } from "@src/stores";
-import { Table, TBody, Td, Th, THead, Tr } from "./TableElements";
+import { SortingArrow, Table, TBody, Td, Th, THead, Tr } from "./TableElements";
 import { Container, Stack, Text } from "@src/components/BaseElements";
 import { useState } from "react";
 import { Input, Option } from "@src/components/Input";
 import { ChevronLeft, ChevronRight } from "@src/icons/Chevron";
 import { IconButton } from "@src/components/Buttons";
+import { UsStates } from "@src/constants";
 
 const columnHelper = createColumnHelper<Employee>();
+
+const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+  const itemRank = rankItem(row.getValue(columnId), value);
+  addMeta({
+    itemRank,
+  });
+  return itemRank.passed;
+};
 
 const columns = [
   columnHelper.accessor("firstName", {
@@ -46,7 +60,8 @@ const columns = [
     header: () => <span>City</span>,
   }),
   columnHelper.accessor("state", {
-    cell: (data) => data.getValue(),
+    cell: (data) =>
+      UsStates.find((obj) => obj.name === data.getValue())?.abbreviation,
     header: () => <span>State</span>,
   }),
   columnHelper.accessor("zipCode", {
@@ -59,12 +74,24 @@ const showAmounts = [10, 25, 50, 100];
 
 const EmployeeTable = () => {
   const employees: Employee[] = useEmployeeStore((state) => state.employees);
-  const [data, setData] = useState(employees);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = useState("");
   const table = useReactTable({
-    data,
+    data: employees,
     columns,
+    filterFns: {
+      fuzzy: fuzzyFilter,
+    },
+    state: {
+      columnFilters,
+      globalFilter,
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: fuzzyFilter,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
   const min =
     table.getState().pagination.pageIndex *
@@ -95,7 +122,10 @@ const EmployeeTable = () => {
         </Stack>
         <Stack align css={{ gap: "$2" }}>
           <p>Search</p>
-          <Input />
+          <Input
+            value={globalFilter ?? ""}
+            onChange={(e) => setGlobalFilter(String(e.target.value))}
+          />
         </Stack>
       </Stack>
       <Table>
@@ -104,12 +134,17 @@ const EmployeeTable = () => {
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <Th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                  <Stack align center css={{ width: "$full" }}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                    <SortingArrow>
+                      <ChevronLeft />
+                    </SortingArrow>
+                  </Stack>
                 </Th>
               ))}
             </tr>

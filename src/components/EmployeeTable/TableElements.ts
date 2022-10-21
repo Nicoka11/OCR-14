@@ -1,4 +1,5 @@
 import { styled } from "@src/styles";
+import { IconButton } from "@src/components/Buttons";
 
 export const Table = styled("table", {
   width: "$full",
@@ -29,3 +30,23 @@ export const Tr = styled("tr", {
 });
 
 export const TBody = styled("tbody", {});
+
+export const SortingArrow = styled(IconButton, {
+  transition: "$default",
+  height: "$6",
+  width: "$6",
+  variants: {
+    variant: {
+      asc: {
+        transform: "rotate(90deg)",
+      },
+      desc: {
+        transform: "rotate(270deg)",
+      },
+      default: {
+        transition: "$default",
+        opacity: 0,
+      },
+    },
+  },
+});

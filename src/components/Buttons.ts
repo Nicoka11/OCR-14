@@ -25,7 +25,7 @@ export const Button = styled("button", {
         color: "$blue6",
         backgroundColor: "transparent",
         "&:hover": {
-          backgroundColor: "transparent",
+          backgroundColor: "red",
         },
         "&:active": {
           backgroundColor: "transparent",
@@ -55,4 +55,11 @@ export const IconButton = styled(Button, {
   width: "$8",
   overflow: "hidden",
   padding: "$0",
+  backgroundColor: "transparent",
+  "&:hover": {
+    backgroundColor: "transparent",
+  },
+  "&:active": {
+    backgroundColor: "transparent",
+  },
 });
