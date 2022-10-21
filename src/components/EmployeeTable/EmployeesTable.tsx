@@ -1,6 +1,5 @@
 import { Employee } from "@src/types";
 import {
-  ColumnFiltersState,
   createColumnHelper,
   FilterFn,
   flexRender,
@@ -74,7 +73,6 @@ const showAmounts = [10, 25, 50, 100];
 
 const EmployeeTable = () => {
   const employees: Employee[] = useEmployeeStore((state) => state.employees);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const table = useReactTable({
     data: employees,
@@ -83,7 +81,6 @@ const EmployeeTable = () => {
       fuzzy: fuzzyFilter,
     },
     state: {
-      columnFilters,
       globalFilter,
     },
     onGlobalFilterChange: setGlobalFilter,
@@ -132,21 +129,28 @@ const EmployeeTable = () => {
         <THead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <Th key={header.id}>
-                  <Stack align center css={{ width: "$full" }}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    <SortingArrow>
-                      <ChevronLeft />
-                    </SortingArrow>
-                  </Stack>
-                </Th>
-              ))}
+              {headerGroup.headers.map((header) => {
+                const mode = header.column.getIsSorted() || "default";
+                console.log(mode);
+                return (
+                  <Th
+                    key={header.id}
+                    onClick={header.column.getToggleSortingHandler()}
+                  >
+                    <Stack align center css={{ width: "$full" }}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                      <SortingArrow variant={mode}>
+                        <ChevronLeft />
+                      </SortingArrow>
+                    </Stack>
+                  </Th>
+                );
+              })}
             </tr>
           ))}
         </THead>

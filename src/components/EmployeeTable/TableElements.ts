@@ -7,6 +7,7 @@ export const Table = styled("table", {
 
 export const Th = styled("th", {
   padding: "$4 $2",
+  cursor: "pointer",
 });
 
 export const THead = styled("thead", {
@@ -37,10 +38,10 @@ export const SortingArrow = styled(IconButton, {
   width: "$6",
   variants: {
     variant: {
-      asc: {
+      desc: {
         transform: "rotate(90deg)",
       },
-      desc: {
+      asc: {
         transform: "rotate(270deg)",
       },
       default: {
