@@ -25,7 +25,7 @@ export const Button = styled("button", {
         color: "$blue6",
         backgroundColor: "transparent",
         "&:hover": {
-          backgroundColor: "red",
+          backgroundColor: "transparent",
         },
         "&:active": {
           backgroundColor: "transparent",
