@@ -107,6 +107,7 @@ const AddEmployeeToast = ({
   const timerRef = useRef(0);
   const [lastEmployeeAdded] = useAtom(lastEmployeeAddedId);
   const removeEmployee = useEmployeeStore((state) => state.removeEmployee);
+  
   const onUndo = () => {
     removeEmployee(lastEmployeeAdded);
     setOpen(false);
