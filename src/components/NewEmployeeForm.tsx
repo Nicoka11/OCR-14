@@ -3,14 +3,14 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "./Buttons";
 import InputGroup, { Option } from "./Input";
 import { UsStates } from "@src/constants";
-import { Box, Heading } from "./BaseElements";
+import { Box, Heading, Text } from "./BaseElements";
 import { AddEmployeePayload, Employee } from "@src/types";
 import { useEmployeeStore } from "@src/stores";
 import { nanoid } from "nanoid";
-import { useCallback, useEffect, useState } from "react";
-import AddEmployeeToast from "./AddEmployeeToast";
+import { useEffect, useState } from "react";
 import { lastEmployeeAddedId } from "@src/atomic/atoms";
 import { useAtom } from "jotai";
+import Modal from "@nicoka/modal";
 
 enum FormFields {
   FirstName = "firstName",
@@ -45,10 +45,7 @@ const NewEmployeeForm = () => {
     mode: "onChange",
     reValidateMode: "onChange",
   });
-  const hasErrors = useCallback(
-    () => Boolean(Object.values(errors).length),
-    [errors]
-  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [asyncReset, setAsyncReset] = useState<boolean>(false);
   const [_, setId] = useAtom(lastEmployeeAddedId);
   const stateValidator = {
@@ -63,6 +60,7 @@ const NewEmployeeForm = () => {
     addEmployee(employee);
     setId(id);
     resetFields();
+    setIsModalOpen(true);
   };
 
   const resetFields = () => setAsyncReset(!asyncReset);
@@ -71,120 +69,135 @@ const NewEmployeeForm = () => {
     reset();
     trigger();
   }, [asyncReset]);
+
+  const MyModal = styled(Modal, {
+    zIndex: "1000",
+  });
+
   return (
-    <Box
-      css={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <Heading>Create Employee</Heading>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <InputGroup
-          errorMessage={errors.firstName?.message}
-          label="First Name"
-          id={FormFields.FirstName}
-          placeholder="First name"
-          {...register(FormFields.FirstName, { required: requiredMessage })}
-          defaultValue=""
-        />
-        <InputGroup
-          errorMessage={errors.lastName?.message}
-          label="Last Name"
-          id={FormFields.LastName}
-          placeholder="Last name"
-          {...register(FormFields.LastName, { required: requiredMessage })}
-        />
-        <InputGroup
-          errorMessage={errors.birthDate?.message}
-          label="Birth date"
-          type="date"
-          id={FormFields.BirthDate}
-          {...register(FormFields.BirthDate, { required: requiredMessage })}
-        />
-        <InputGroup
-          errorMessage={errors.startDate?.message}
-          label="Start date"
-          type="date"
-          id={FormFields.StartDate}
-          {...register(FormFields.StartDate, { required: requiredMessage })}
-        />
-        <InputGroup
-          errorMessage={errors.street?.message}
-          label="Street"
-          placeholder="31b Baker Street"
-          id={FormFields.AddressStreet}
-          {...register(FormFields.AddressStreet, { required: requiredMessage })}
-        />
-        <InputGroup
-          errorMessage={errors.city?.message}
-          label="City"
-          placeholder="London"
-          id={FormFields.AddressCity}
-          {...register(FormFields.AddressCity, { required: requiredMessage })}
-        />
-        <InputGroup
-          as="select"
-          id={FormFields.AddressState}
-          errorMessage={errors.state?.message}
-          label="State"
-          defaultValue="default"
-          {...register(FormFields.AddressState, stateValidator)}
-        >
-          <Option value="default" disabled hidden>
-            Select your state
-          </Option>
-          {UsStates.map((state) => (
-            <Option key={nanoid()} value={state.abbreviation}>
-              {state.name}
-            </Option>
-          ))}
-        </InputGroup>
-        <InputGroup
-          id={FormFields.AddressZipCode}
-          errorMessage={errors.zipCode?.message}
-          label="Zipcode"
-          placeholder="70000"
-          {...register(FormFields.AddressZipCode, {
-            required: requiredMessage,
-          })}
-        />
-        <div>
+    <>
+      <MyModal isOpen={isModalOpen} onClick={() => setIsModalOpen(false)}>
+        <Text css={{ color: "$slate2" }}>Modal shown</Text>
+      </MyModal>
+      <Box
+        css={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Heading>Create Employee</Heading>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <InputGroup
+            errorMessage={errors.firstName?.message}
+            label="First Name"
+            id={FormFields.FirstName}
+            placeholder="First name"
+            {...register(FormFields.FirstName, { required: requiredMessage })}
+            defaultValue=""
+          />
+          <InputGroup
+            errorMessage={errors.lastName?.message}
+            label="Last Name"
+            id={FormFields.LastName}
+            placeholder="Last name"
+            {...register(FormFields.LastName, { required: requiredMessage })}
+          />
+          <InputGroup
+            errorMessage={errors.birthDate?.message}
+            label="Birth date"
+            type="date"
+            id={FormFields.BirthDate}
+            {...register(FormFields.BirthDate, { required: requiredMessage })}
+          />
+          <InputGroup
+            errorMessage={errors.startDate?.message}
+            label="Start date"
+            type="date"
+            id={FormFields.StartDate}
+            {...register(FormFields.StartDate, { required: requiredMessage })}
+          />
+          <InputGroup
+            errorMessage={errors.street?.message}
+            label="Street"
+            placeholder="31b Baker Street"
+            id={FormFields.AddressStreet}
+            {...register(FormFields.AddressStreet, {
+              required: requiredMessage,
+            })}
+          />
+          <InputGroup
+            errorMessage={errors.city?.message}
+            label="City"
+            placeholder="London"
+            id={FormFields.AddressCity}
+            {...register(FormFields.AddressCity, { required: requiredMessage })}
+          />
           <InputGroup
             as="select"
-            id={FormFields.Department}
-            errorMessage={errors.department?.message}
-            label="Department"
-            defaultValue="sales"
-            {...register(FormFields.Department)}
+            id={FormFields.AddressState}
+            errorMessage={errors.state?.message}
+            label="State"
+            defaultValue="default"
+            {...register(FormFields.AddressState, stateValidator)}
           >
-            <Option value="sales" selected>
-              Sales
+            <Option value="default" disabled hidden>
+              Select your state
             </Option>
-            <Option value="marketing">Marketing</Option>
-            <Option value="engineering">Engineering</Option>
-            <Option value="human-ressources">Human Resources</Option>
-            <Option value="legal">Legal</Option>
+            {UsStates.map((state) => (
+              <Option key={nanoid()} value={state.name}>
+                {state.name}
+              </Option>
+            ))}
           </InputGroup>
-        </div>
-        <div>
-          <AddEmployeeToast
-            hasErrors={hasErrors()}
-            disabled={!isValid}
-            css={{ marginTop: "$6" }}
+          <InputGroup
+            id={FormFields.AddressZipCode}
+            errorMessage={errors.zipCode?.message}
+            label="Zipcode"
+            placeholder="70000"
+            {...register(FormFields.AddressZipCode, {
+              required: requiredMessage,
+            })}
           />
-          <Button
-            variant="ghost"
-            size="full"
-            onClick={resetFields}
-            css={{ marginBottom: "$12", marginTop: "$2" }}
-          >
-            Reset fields
-          </Button>
-        </div>
-      </Form>
-    </Box>
+          <div>
+            <InputGroup
+              as="select"
+              id={FormFields.Department}
+              errorMessage={errors.department?.message}
+              label="Department"
+              defaultValue="sales"
+              {...register(FormFields.Department)}
+            >
+              <Option value="sales" selected>
+                Sales
+              </Option>
+              <Option value="marketing">Marketing</Option>
+              <Option value="engineering">Engineering</Option>
+              <Option value="human-ressources">Human Resources</Option>
+              <Option value="legal">Legal</Option>
+            </InputGroup>
+          </div>
+          <div>
+            <Button
+              as="input"
+              type="submit"
+              disabled={!isValid}
+              css={{ marginTop: "$6" }}
+              size="full"
+              value="Save"
+            />
+            <Button
+              variant="ghost"
+              size="full"
+              onClick={resetFields}
+              css={{ marginBottom: "$12", marginTop: "$2" }}
+            >
+              Reset fields
+            </Button>
+          </div>
+        </Form>
+      </Box>
+    </>
   );
 };
 

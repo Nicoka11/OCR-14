@@ -1,57 +1,58 @@
-import * as ToastPrimitive from "@radix-ui/react-toast";
-import { styled } from "@src/styles";
-import { ComponentProps, keyframes } from "@stitches/react";
-import { useAtom } from "jotai";
-import { ElementType, useEffect, useRef, useState } from "react";
-import { Button } from "./Buttons";
-import { lastEmployeeAddedId } from "@src/atomic/atoms";
-import { useEmployeeStore } from "@src/stores";
+import * as ToastPrimitive from '@radix-ui/react-toast'
+import { styled } from '@src/styles'
+import { ComponentProps, keyframes } from '@stitches/react'
+import { useAtom } from 'jotai'
+import { ElementType, MouseEvent, useEffect, useRef, useState } from 'react'
+import { Button } from './Buttons'
+import { lastEmployeeAddedId } from '@src/atomic/atoms'
+import { useEmployeeStore } from '@src/stores'
+import Modal from '@nicoka/modal'
 
 const hide = keyframes({
-  "0%": { opacity: 1 },
-  "100%": { opacity: 0 },
-});
+  '0%': { opacity: 1 },
+  '100%': { opacity: 0 },
+})
 
-const VIEWPORT_PADDING = 25;
+const VIEWPORT_PADDING = 25
 
 const slideIn = keyframes({
   from: { transform: `translateX(calc(100% + ${VIEWPORT_PADDING}px))` },
-  to: { transform: "translateX(0)" },
-});
+  to: { transform: 'translateX(0)' },
+})
 
 const swipeOut = keyframes({
-  from: { transform: "translateX(var(--radix-toast-swipe-end-x))" },
+  from: { transform: 'translateX(var(--radix-toast-swipe-end-x))' },
   to: { transform: `translateX(calc(100% + ${VIEWPORT_PADDING}px))` },
-});
+})
 
 const StyledViewport = styled(ToastPrimitive.Viewport, {
-  position: "fixed",
+  position: 'fixed',
   bottom: 0,
   right: 0,
-  display: "flex",
-  flexDirection: "column",
+  display: 'flex',
+  flexDirection: 'column',
   padding: VIEWPORT_PADDING,
   gap: 10,
   width: 390,
-  maxWidth: "100vw",
+  maxWidth: '100vw',
   margin: 0,
-  listStyle: "none",
+  listStyle: 'none',
   zIndex: 2147483647,
-  outline: "none",
-});
+  outline: 'none',
+})
 
 const StyledToast = styled(ToastPrimitive.Root, {
-  backgroundColor: "white",
+  backgroundColor: 'white',
   borderRadius: 6,
-  boxShadow: "$toast",
+  boxShadow: '$toast',
   padding: 15,
-  display: "grid",
+  display: 'grid',
   gridTemplateAreas: '"title action" "description action"',
-  gridTemplateColumns: "auto max-content",
+  gridTemplateColumns: 'auto max-content',
   columnGap: 15,
-  alignItems: "center",
+  alignItems: 'center',
 
-  "@media (prefers-reduced-motion: no-preference)": {
+  '@media (prefers-reduced-motion: no-preference)': {
     '&[data-state="open"]': {
       animation: `${slideIn} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
     },
@@ -59,62 +60,63 @@ const StyledToast = styled(ToastPrimitive.Root, {
       animation: `${hide} 100ms ease-in`,
     },
     '&[data-swipe="move"]': {
-      transform: "translateX(var(--radix-toast-swipe-move-x))",
+      transform: 'translateX(var(--radix-toast-swipe-move-x))',
     },
     '&[data-swipe="cancel"]': {
-      transform: "translateX(0)",
-      transition: "transform 200ms ease-out",
+      transform: 'translateX(0)',
+      transition: 'transform 200ms ease-out',
     },
     '&[data-swipe="end"]': {
       animation: `${swipeOut} 100ms ease-out`,
     },
   },
-});
+})
 
 const StyledTitle = styled(ToastPrimitive.Title, {
-  gridArea: "title",
+  gridArea: 'title',
   marginBottom: 5,
   fontWeight: 500,
-  color: "$slate12",
+  color: '$slate12',
   fontSize: 15,
-});
+})
 
 const StyledAction = styled(ToastPrimitive.Action, {
-  gridArea: "action",
-});
+  gridArea: 'action',
+})
 
 // Exports
-export const ToastProvider = ToastPrimitive.Provider;
-export const ToastViewport = StyledViewport;
-export const Toast = StyledToast;
-export const ToastTitle = StyledTitle;
-export const ToastAction = StyledAction;
-export const ToastClose = ToastPrimitive.Close;
+export const ToastProvider = ToastPrimitive.Provider
+export const ToastViewport = StyledViewport
+export const Toast = StyledToast
+export const ToastTitle = StyledTitle
+export const ToastAction = StyledAction
+export const ToastClose = ToastPrimitive.Close
 
 interface AddEmployeeToastProps extends ComponentProps<typeof Button> {
-  onBtnClick?: () => void;
-  btnAs?: ElementType;
-  hasErrors: boolean;
+  onBtnClick?: () => void
+  btnAs?: ElementType
+  hasErrors: boolean
 }
 
 const AddEmployeeToast = ({
   onBtnClick,
-  btnAs = "input",
+  btnAs = 'input',
   hasErrors,
   ...props
 }: AddEmployeeToastProps) => {
-  const [open, setOpen] = useState(false);
-  const timerRef = useRef(0);
-  const [lastEmployeeAdded] = useAtom(lastEmployeeAddedId);
-  const removeEmployee = useEmployeeStore((state) => state.removeEmployee);
+  const [open, setOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const timerRef = useRef(0)
+  const [lastEmployeeAdded] = useAtom(lastEmployeeAddedId)
+  const removeEmployee = useEmployeeStore((state) => state.removeEmployee)
   const onUndo = () => {
-    removeEmployee(lastEmployeeAdded);
-    setOpen(false);
-  };
+    removeEmployee(lastEmployeeAdded)
+    setOpen(false)
+  }
 
   useEffect(() => {
-    return () => clearTimeout(timerRef.current);
-  }, []);
+    return () => clearTimeout(timerRef.current)
+  }, [])
 
   return (
     <ToastProvider swipeDirection="right">
@@ -124,17 +126,26 @@ const AddEmployeeToast = ({
         value="Save"
         size="full"
         onClick={() => {
-          if (onBtnClick) onBtnClick();
-          if (hasErrors) return;
-          setOpen(false);
-          window.clearTimeout(timerRef.current);
+          if (onBtnClick) onBtnClick()
+          if (hasErrors) return
+          setOpen(false)
+          setIsModalOpen(true)
+          window.clearTimeout(timerRef.current)
           timerRef.current = window.setTimeout(() => {
-            setOpen(true);
-          }, 100);
+            setOpen(true)
+          }, 100)
         }}
         {...props}
       />
-
+      <Modal
+        isOpen={isModalOpen}
+        onClick={(e) => {
+          console.log(e)
+          setIsModalOpen(false)
+        }}
+      >
+        Employee added to database
+      </Modal>
       <Toast open={open} onOpenChange={setOpen}>
         <ToastTitle>Employee added to database</ToastTitle>
         <ToastAction asChild altText="Undo adding employee">
@@ -143,7 +154,7 @@ const AddEmployeeToast = ({
       </Toast>
       <ToastViewport />
     </ToastProvider>
-  );
-};
+  )
+}
 
-export default AddEmployeeToast;
+export default AddEmployeeToast
