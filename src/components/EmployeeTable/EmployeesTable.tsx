@@ -118,9 +118,12 @@ const EmployeeTable = () => {
           entries
         </Stack>
         <Stack align css={{ gap: "$2" }}>
-          <p>Search</p>
+          <Text as="label" htmlFor="search">
+            Search
+          </Text>
           <Input
             value={globalFilter ?? ""}
+            id="search"
             onChange={(e) => setGlobalFilter(String(e.target.value))}
           />
         </Stack>
@@ -144,7 +147,7 @@ const EmployeeTable = () => {
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                      <SortingArrow variant={mode}>
+                      <SortingArrow variant={mode} aria-label="change sorting">
                         <ChevronLeft />
                       </SortingArrow>
                     </Stack>
@@ -173,6 +176,7 @@ const EmployeeTable = () => {
         <Stack align css={{ gap: "$3" }}>
           <IconButton
             variant="ghost"
+            aria-label="previous page"
             onClick={() => table.previousPage()}
             visible={!table.getCanPreviousPage()}
           >
@@ -183,6 +187,7 @@ const EmployeeTable = () => {
           </Text>
           <IconButton
             variant="ghost"
+            aria-label="next page"
             onClick={() => table.nextPage()}
             visible={!table.getCanNextPage()}
           >
