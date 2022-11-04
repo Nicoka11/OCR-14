@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@nicoka/modal': ^2.0.2
+  '@nicoka/modal': ^2.0.3
   '@radix-ui/colors': ^0.1.8
   '@radix-ui/react-toast': ^1.0.0
   '@stitches/react': ^1.2.8
@@ -24,7 +24,7 @@ specifiers:
   zustand: ^4.1.1
 
 dependencies:
-  '@nicoka/modal': 2.0.2_biqbaboplfbrettd7655fr4n2y
+  '@nicoka/modal': 2.0.3_biqbaboplfbrettd7655fr4n2y
   '@radix-ui/colors': 0.1.8
   '@radix-ui/react-toast': 1.0.0_biqbaboplfbrettd7655fr4n2y
   '@stitches/react': 1.2.8_react@18.2.0
@@ -371,8 +371,8 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@nicoka/modal/2.0.2_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-eJA9WQr2txsfMRF7SwfimD3/KP0NQVQTB4VqiDQLGR0vKRTDIaYniFQtAlm2ls8iaT2YnoGwEJXaZIfkXNWx6A==}
+  /@nicoka/modal/2.0.3_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-OvfahAckqtcS+mwekd3XUJUqaPwTxVA+Wt5ak1p7IVQihLC0vzPuukSvO3f5E+CHLlNW7C6RKnAWUylTiCNZPw==}
     peerDependencies:
       react: 16.8.0 || >=18.x
       react-dom: 16.8.0 || >=18.x

@@ -9,6 +9,7 @@ interface Store {
 }
 
 const useEmployeeStore = create<Store>((set) => ({
+  // For demonstration purposes, the store is pre-loaded with 15 employees.
   employees: dataset,
   addEmployee: (newEmployee: Employee) =>
     set((state) => {

@@ -10,7 +10,7 @@ import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import { lastEmployeeAddedId } from "@src/atomic/atoms";
 import { useAtom } from "jotai";
-import Modal from "@nicoka/modal";
+import Modal from "./Modal";
 
 enum FormFields {
   FirstName = "firstName",
@@ -70,15 +70,11 @@ const NewEmployeeForm = () => {
     trigger();
   }, [asyncReset]);
 
-  const MyModal = styled(Modal, {
-    zIndex: "1000",
-  });
-
   return (
     <>
-      <MyModal isOpen={isModalOpen} onClick={() => setIsModalOpen(false)}>
-        <Text css={{ color: "$slate2" }}>Modal shown</Text>
-      </MyModal>
+      <Modal isOpen={isModalOpen} onClick={() => setIsModalOpen(false)}>
+        <Text css={{ color: "black" }}>Employee added to database</Text>
+      </Modal>
       <Box
         css={{
           display: "flex",
