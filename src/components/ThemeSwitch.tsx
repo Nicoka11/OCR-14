@@ -14,6 +14,7 @@ const ThemeSwitch = () => {
   return (
     <IconButton
       variant="ghost"
+      aria-label="toggle dark theme"
       onClick={onClickHandler}
       css={{
         transform: `rotate(${isDarkTheme ? "90" : "0"}deg)`,

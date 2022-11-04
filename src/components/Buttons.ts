@@ -22,7 +22,7 @@ export const Button = styled("button", {
   variants: {
     variant: {
       ghost: {
-        color: "$blue6",
+        color: "$blue10",
         backgroundColor: "transparent",
         "&:hover": {
           backgroundColor: "transparent",
